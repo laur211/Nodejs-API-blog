@@ -1,4 +1,3 @@
-const { string } = require("@hapi/joi");
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
@@ -35,7 +34,7 @@ const postsSchema = mongoose.Schema({
     },
     description:{
         type: String,
-        required: true,
+        required: false,
         min: 6,
         max: 255
     },
@@ -43,7 +42,7 @@ const postsSchema = mongoose.Schema({
         type: Date,
         default: Date.now
     }
-})
+});
 
-module.exports = mongoose.model("User", userSchema);
-module.exports = mongoose.model("Posts", postsSchema);
+module.exports.userSchema = mongoose.model("User", userSchema);
+module.exports.postsSchema = mongoose.model("Posts", postsSchema);

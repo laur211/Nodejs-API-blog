@@ -1,14 +1,15 @@
 const router = require("express").Router();
 const verify = require("./verifyToken");
-const postSchema = require("../modules/schemas");
+const postSchema = require("../modules/schemas").postsSchema;
 const { query } = require("express");
 const verifyToken = require("./verifyToken");
+const { postValidation } = require("../validation");
+
 
 
 router.get("/", async (req, res) =>{
     const posts = await postSchema.find();
     res.json(posts);
-
 });
 
 router.get("/:postId", async (req, res) => {
@@ -20,10 +21,11 @@ router.get("/:postId", async (req, res) => {
     }
 });
 
-
-
-
 router.post("/", verifyToken, async(req, res) =>{
+    console.log("Entered on post create");
+    const validationPost = postValidation(req.body)
+    if(validationPost.error){
+        return res.status(400).json({message: validationPost.error.details[0].message})};
     const post = new postSchema({
         title: req.body.title,
         description: req.body.description
@@ -37,6 +39,9 @@ router.post("/", verifyToken, async(req, res) =>{
 });
 
 router.patch("/:postId",verifyToken, async (req, res) => {
+    const validationPost = postValidation(req.body)
+    if(validationPost.error){
+        return res.status(400).json({message: validationPost.error.details[0].message})};
     try{
         const updatePost = await postSchema.updateOne(
             {_id: req.params.postId},

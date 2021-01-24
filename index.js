@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const dontenv = require("dotenv");
 const authRoute = require ("./routes/auth");
 const postRoute = require("./routes/posts");
-
+const cors = require("cors");
 
 
 dontenv.config();
@@ -19,10 +19,11 @@ useUnifiedTopology: true }, (err)=>{
 });
 
 app.use(express.json());
+app.use(cors());
+
 
 app.use("/api/user", authRoute);
-
 app.use("/api/posts", postRoute);
 
 app.listen(process.env.PORT, ()=>
-console.log("Server started"));
+console.log("Server started on port", process.env.PORT));
