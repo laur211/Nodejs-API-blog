@@ -2,7 +2,6 @@ const Joi = require("@hapi/joi");
 
 
 const registerValidation =(data) =>{
-    console.log("Entered on registerValidation");
     const schema = Joi.object({
         name: Joi.string().min(3).required(),
         email: Joi.string().min(6).required().email(),

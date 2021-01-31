@@ -17,12 +17,11 @@ router.get("/:postId", async (req, res) => {
         const post = await postSchema.findById(req.params.postId);
         res.json(post);
     }catch(err){
-        res.status(404).send("Post not found");
+        res.status(404).json({message: "Post not found"});
     }
 });
 
 router.post("/", verifyToken, async(req, res) =>{
-    console.log("Entered on post create");
     const validationPost = postValidation(req.body)
     if(validationPost.error){
         return res.status(400).json({message: validationPost.error.details[0].message})};
@@ -58,7 +57,7 @@ router.patch("/:postId",verifyToken, async (req, res) => {
 router.delete("/:postId",verifyToken, async (req, res)=>{
     try{
         const postDeleted = await postSchema.findByIdAndDelete(req.params.postId);
-        res.send("Post has been deleted!");        
+        res.json({message: "Post has been deleted!"});        
     }catch(err){
         res.status(400).json({message: err})
     }
